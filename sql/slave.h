@@ -32,8 +32,8 @@
   @file
 */
 
-/** 
-   Some of defines are need in parser even though replication is not 
+/**
+   Some of defines are need in parser even though replication is not
    compiled in (embedded).
 */
 
@@ -78,11 +78,11 @@ int init_dynarray_intvar_from_file(DYNAMIC_ARRAY* arr, IO_CACHE* f);
     I/O Thread - One of these threads is started for each master server.
                  They maintain a connection to their master server, read log
                  events from the master as they arrive, and queues them into
-                 a single, shared relay log file.  A Master_info 
+                 a single, shared relay log file.  A Master_info
                  represents each of these threads.
 
     SQL Thread - One of these threads is started and reads from the relay log
-                 file, executing each event.  A Relay_log_info 
+                 file, executing each event.  A Relay_log_info
                  represents this thread.
 
   Buffering in the relay log file makes it unnecessary to reread events from
@@ -119,7 +119,7 @@ int init_dynarray_intvar_from_file(DYNAMIC_ARRAY* arr, IO_CACHE* f);
   see Master_info
   However, note that run_lock does not protect
   Relay_log_info.run_state; that is protected by data_lock.
-  
+
   Order of acquisition: if you want to have LOCK_active_mi and a run_lock, you
   must acquire LOCK_active_mi first.
 
@@ -146,6 +146,7 @@ extern char *opt_slave_transaction_retry_errors;
 extern my_bool opt_replicate_annotate_row_events;
 extern ulonglong relay_log_space_limit;
 extern ulonglong opt_read_binlog_speed_limit;
+extern ulonglong opt_apply_binlog_speed_limit;
 extern ulonglong slave_skipped_errors;
 extern const char *relay_log_index;
 extern const char *relay_log_basename;

@@ -202,15 +202,15 @@ void xtrc(char const *fmt, ...)
   va_end (ap);
   } // end of htrc
 
-static xmlFreeFunc Free; 
+static xmlFreeFunc Free;
 static xmlMallocFunc Malloc;
-static xmlMallocFunc MallocA; 
-static xmlReallocFunc Realloc; 
+static xmlMallocFunc MallocA;
+static xmlReallocFunc Realloc;
 static xmlStrdupFunc Strdup;
 
 void xmlMyFree(void *mem)
 {
-  if (trace(1)) { 
+  if (trace(1)) {
     htrc("%.4d Freeing          at %p   %-.256s\n", ++m, mem, s);
     *s = 0;
     } // endif trace
@@ -220,7 +220,7 @@ void xmlMyFree(void *mem)
 void *xmlMyMalloc(size_t size)
 {
   void *p = Malloc(size);
-  if (trace(1)) { 
+  if (trace(1)) {
     htrc("%.4d Allocating %.5d at %p   %-.256s\n", ++m, size, p, s);
     *s = 0;
     } // endif trace
@@ -230,7 +230,7 @@ void *xmlMyMalloc(size_t size)
 void *xmlMyMallocAtomic(size_t size)
 {
   void *p = MallocA(size);
-  if (trace(1)) { 
+  if (trace(1)) {
     htrc("%.4d Atom alloc %.5d at %p   %-.256s\n", ++m, size, p, s);
     *s = 0;
     } // endif trace
@@ -240,7 +240,7 @@ void *xmlMyMallocAtomic(size_t size)
 void *xmlMyRealloc(void *mem, size_t size)
 {
   void *p = Realloc(mem, size);
-  if (trace(1)) { 
+  if (trace(1)) {
     htrc("%.4d ReAlloc    %.5d to %p from %p   %-.256s\n", ++m, size, p, mem, s);
     *s = 0;
     } // endif trace
@@ -250,7 +250,7 @@ void *xmlMyRealloc(void *mem, size_t size)
 char *xmlMyStrdup(const char *str)
 {
   char *p = Strdup(str);
-  if (trace(1)) { 
+  if (trace(1)) {
     htrc("%.4d Duplicating      to %p from %p %-.256s   %-.256s\n", ++m, p, str, str, s);
     *s = 0;
     } // endif trace
@@ -262,7 +262,7 @@ char *xmlMyStrdup(const char *str)
 /******************************************************************/
 /*  Return a LIBXMLDOC as a XMLDOC.                               */
 /******************************************************************/
-PXDOC GetLibxmlDoc(PGLOBAL g, char *nsl, char *nsdf, 
+PXDOC GetLibxmlDoc(PGLOBAL g, char *nsl, char *nsdf,
                                          char *enc, PFBLOCK fp)
   {
   return (PXDOC) new(g) LIBXMLDOC(nsl, nsdf, enc, fp);
@@ -277,11 +277,11 @@ void XmlInitParserLib(void)
 int	rc = xmlGcMemGet(&Free, &Malloc, &MallocA, &Realloc, &Strdup);
 
 if (!rc)
-  rc = xmlGcMemSetup(xmlMyFree, 
-                     xmlMyMalloc, 
+  rc = xmlGcMemSetup(xmlMyFree,
+                     xmlMyMalloc,
                      xmlMyMallocAtomic,
                      xmlMyRealloc,
-                     xmlMyStrdup); 
+                     xmlMyStrdup);
 
 #endif   // MEMORY_TRACE
   xmlInitParser();
@@ -600,7 +600,7 @@ xmlNodeSetPtr LIBXMLDOC::GetNodeList(PGLOBAL g, xmlNodePtr np, char *xp)
     if (trace(1))
       htrc("Calling xmlPathInit\n");
 
-    xmlXPathInit();
+    xmlInitParser();
 
     if (trace(1))
       htrc("Calling xmlXPathNewContext Docp=%p\n", Docp);
@@ -618,7 +618,7 @@ xmlNodeSetPtr LIBXMLDOC::GetNodeList(PGLOBAL g, xmlNodePtr np, char *xp)
     // Register namespaces from list (if any)
     for (PNS nsp = Namespaces; nsp; nsp = nsp->Next) {
       if (trace(1))
-        htrc("Calling xmlXPathRegisterNs Prefix=%-.256s Uri=%-.512s\n", 
+        htrc("Calling xmlXPathRegisterNs Prefix=%-.256s Uri=%-.512s\n",
              nsp->Prefix, nsp->Uri);
 
       if (xmlXPathRegisterNs(Ctxp, BAD_CAST nsp->Prefix,
@@ -637,7 +637,7 @@ xmlNodeSetPtr LIBXMLDOC::GetNodeList(PGLOBAL g, xmlNodePtr np, char *xp)
 
   if (Xop) {
     if (trace(1))
-      htrc("Calling xmlXPathFreeNodeSetList Xop=%p NOFREE=%d\n", 
+      htrc("Calling xmlXPathFreeNodeSetList Xop=%p NOFREE=%d\n",
                                             Xop, Nofreelist);
 
     if (Nofreelist) {
@@ -837,7 +837,7 @@ RCODE XML2NODE::GetContent(PGLOBAL g, char *buf, int len)
             *p2++ = ' ';
             b = false;
             }  // endif b
-    
+
         } else {
           *p2++ = *p1;
           b = true;
